@@ -37,6 +37,9 @@ public class Item {
         return title;
     }
 
+    @NonNull
+    public String getId() { return id; }
+
     public void setTitle(String title) {
         this.title = title;
     }

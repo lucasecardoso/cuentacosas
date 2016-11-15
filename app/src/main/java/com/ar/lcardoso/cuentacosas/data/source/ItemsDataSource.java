@@ -26,8 +26,17 @@ public interface ItemsDataSource {
         void onDataNotAvailable();
     }
 
+    interface SaveItemCallback {
+
+        void onItemSaved();
+
+        void onSaveFailed();
+    }
+
     void getItems(@NonNull LoadItemsCallback callback);
 
     void getItem(@NonNull String id, @NonNull GetItemCallback callback);
+
+    void saveItem(@NonNull Item item, @NonNull SaveItemCallback callback);
 
 }
