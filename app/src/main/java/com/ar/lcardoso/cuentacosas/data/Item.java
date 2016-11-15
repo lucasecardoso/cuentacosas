@@ -47,4 +47,23 @@ public class Item {
     public void setCount(int count) {
         this.count = count;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (!id.equals(item.id)) return false;
+        return title.equals(item.title);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + title.hashCode();
+        return result;
+    }
 }

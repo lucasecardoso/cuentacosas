@@ -19,22 +19,25 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Lucas on 14/11/2016.
  */
 
-public class ItemsLocalRepository implements ItemsDataSource {
+public class ItemsLocalDataSource implements ItemsDataSource {
 
-    private static ItemsLocalRepository INSTANCE;
+    private static ItemsLocalDataSource INSTANCE;
     private final ItemsDbHelper mDbHelper;
 
-    private ItemsLocalRepository(Context context) {
+    private ItemsLocalDataSource(Context context) {
         checkNotNull(context);
         mDbHelper = new ItemsDbHelper(context);
     }
 
-    public static ItemsLocalRepository getInstance(@NonNull Context context) {
-
+    public static ItemsLocalDataSource getInstance(@NonNull Context context) {
         if (INSTANCE == null)
-            return new ItemsLocalRepository(context);
+            return new ItemsLocalDataSource(context);
 
         return INSTANCE;
+    }
+
+    public static void destroyInstance() {
+        INSTANCE = null;
     }
 
     @Override
@@ -118,7 +121,7 @@ public class ItemsLocalRepository implements ItemsDataSource {
         checkNotNull(item);
         checkNotNull(callback);
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(ItemEntry.COLUMN_NAME_ENTRY_ID, item.getId());
@@ -132,5 +135,14 @@ public class ItemsLocalRepository implements ItemsDataSource {
             db.close();
             callback.onItemSaved();
         }
+    }
+
+    @Override
+    public void deleteAllItems() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        db.delete(ItemEntry.TABLE_NAME, null, null);
+
+        db.close();
     }
 }

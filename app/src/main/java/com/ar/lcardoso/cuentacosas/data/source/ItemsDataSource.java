@@ -39,4 +39,6 @@ public interface ItemsDataSource {
 
     void saveItem(@NonNull Item item, @NonNull SaveItemCallback callback);
 
+    void deleteAllItems();
+
 }
