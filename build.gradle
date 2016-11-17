@@ -27,4 +27,5 @@ task clean(type: Delete) {
 ext {
     espressoVersion = '2.2.2'
     guavaVersion = '18.0'
+    mockitoVersion = '1.10.19'
 }

@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CuentaCosas" parent="AppTheme" >
+        <item name="colorAccent">@android:color/holo_orange_light</item>
+    </style>
+
 </resources>

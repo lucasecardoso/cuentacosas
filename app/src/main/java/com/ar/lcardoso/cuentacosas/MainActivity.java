@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.ar.lcardoso.cuentacosas.items.ItemLine;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,6 +18,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout = (LinearLayout) findViewById(R.id.inner_layout);
 
         //NEED TO SET PROGRAMMATICALLY THE WIDTH AND HEIGHT OF THE VIEW
-        layout.addView(new ItemLine(this));
+        //layout.addView(new ItemLine(this));
     }
 }

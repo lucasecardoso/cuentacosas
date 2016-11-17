@@ -51,7 +51,7 @@ public class ItemLine extends LinearLayout {
         Log.d("DEBUG", "postInflateTasks() called");
 
         final EditText et = (EditText)this.findViewById(R.id.edit_text);
-        final TextView tv = (TextView) this.findViewById(R.id.item_name);
+        final TextView tv = (TextView) this.findViewById(R.id.item_title);
 
         final View plusBtn = this.findViewById(R.id.plus_btn);
         final View minusBtn = this.findViewById(R.id.minus_btn);
@@ -79,7 +79,7 @@ public class ItemLine extends LinearLayout {
     }
 
     private void switchTextViews() {
-        final TextView tv = (TextView) this.findViewById(R.id.item_name);
+        final TextView tv = (TextView) this.findViewById(R.id.item_title);
         final EditText et = (EditText)this.findViewById(R.id.edit_text);
 
         if (tv.getVisibility() == VISIBLE) {
