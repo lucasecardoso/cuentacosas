@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ar.lcardoso.cuentacosas.data.Item;
 import com.ar.lcardoso.cuentacosas.data.source.ItemsDataSource;
@@ -144,5 +145,54 @@ public class ItemsLocalDataSource implements ItemsDataSource {
         db.delete(ItemEntry.TABLE_NAME, null, null);
 
         db.close();
+    }
+
+    @Override
+    public void addCount(@NonNull Item item, UpdateItemCallback callback) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        item.setCount(item.getCount() + 1);
+
+        int update = updateItemCount(item, db);
+
+        if (update == -1) {
+            db.close();
+            callback.onUpdateFailed(item);
+        } else {
+            db.close();
+            callback.onItemUpdated();
+        }
+    }
+
+
+    @Override
+    public void substractCount(@NonNull Item item, @NonNull UpdateItemCallback updateItemCallback) {
+        if (item.getCount() <= 0)
+            return;
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        item.setCount(item.getCount() - 1);
+
+        int update = updateItemCount(item, db);
+
+        if (update == -1) {
+            db.close();
+            updateItemCallback.onUpdateFailed(item);
+        } else {
+            db.close();
+            updateItemCallback.onItemUpdated();
+        }
+
+    }
+
+
+    private int updateItemCount(@NonNull Item item, SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+        values.put(ItemEntry.COLUMN_NAME_COUNT, item.getCount());
+
+        Log.d("DEBUG", "Updating item " + item.getId() + " with count = " + item.getCount());
+
+        return db.update(ItemEntry.TABLE_NAME, values, ItemEntry.COLUMN_NAME_ENTRY_ID + " = ? ", new String[]{item.getId()});
     }
 }

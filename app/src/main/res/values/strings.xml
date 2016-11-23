@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CuentaCosas</string>
+    <string name="additem_name">Item Name</string>
+    <string name="additem_headline">Add a name for this item</string>
 </resources>

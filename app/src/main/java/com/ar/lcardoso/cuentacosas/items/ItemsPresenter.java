@@ -1,6 +1,7 @@
 package com.ar.lcardoso.cuentacosas.items;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.ar.lcardoso.cuentacosas.data.Item;
 import com.ar.lcardoso.cuentacosas.data.source.ItemsDataSource;
@@ -22,6 +23,7 @@ public class ItemsPresenter implements ItemsContract.Presenter {
     public ItemsPresenter(@NonNull ItemsDataSource mDataSource, @NonNull ItemsContract.View mItemsFragment) {
         this.mDataSource = mDataSource;
         this.mItemsView = mItemsFragment;
+        this.mItemsView.setPresenter(this);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ItemsPresenter implements ItemsContract.Presenter {
             @Override
             public void onItemSaved() {
                 System.out.println("Item saved successfully");
-
+                showItems();
             }
 
             @Override
@@ -38,6 +40,24 @@ public class ItemsPresenter implements ItemsContract.Presenter {
                 System.out.println("Error occurred while saving item");
             }
         });
+
+        showItems();
+    }
+
+    @Override
+    public void deleteItems() {
+        mDataSource.deleteAllItems();
+        mItemsView.showNoItems();
+    }
+
+    @Override
+    public void addCount(Item item) {
+        mDataSource.addCount(item, updateItemCallback);
+    }
+
+    @Override
+    public void substractCount(Item item) {
+        mDataSource.substractCount(item, updateItemCallback);
     }
 
     public void showItems() {
@@ -60,4 +80,18 @@ public class ItemsPresenter implements ItemsContract.Presenter {
     public void start() {
         showItems();
     }
+
+    private ItemsDataSource.UpdateItemCallback updateItemCallback = new ItemsDataSource.UpdateItemCallback() {
+
+        @Override
+        public void onItemUpdated() {
+            showItems();
+        }
+
+        @Override
+        public void onUpdateFailed(Item item) {
+            Log.d("DEBUG", "Item " + item.getId() + " " + item.getTitle() + " update failed");
+        }
+
+    };
 }

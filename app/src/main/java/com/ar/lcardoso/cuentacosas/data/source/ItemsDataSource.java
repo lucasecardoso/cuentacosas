@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface ItemsDataSource {
 
+
     interface LoadItemsCallback {
 
         void onItemsLoaded(List<Item> items);
@@ -33,6 +34,13 @@ public interface ItemsDataSource {
         void onSaveFailed();
     }
 
+    interface UpdateItemCallback {
+
+        void onItemUpdated();
+
+        void onUpdateFailed(Item item);
+    }
+
     void getItems(@NonNull LoadItemsCallback callback);
 
     void getItem(@NonNull String id, @NonNull GetItemCallback callback);
@@ -40,5 +48,10 @@ public interface ItemsDataSource {
     void saveItem(@NonNull Item item, @NonNull SaveItemCallback callback);
 
     void deleteAllItems();
+
+    void addCount(@NonNull Item item, @NonNull UpdateItemCallback callback);
+
+    void substractCount(@NonNull Item item, @NonNull UpdateItemCallback updateItemCallback);
+
 
 }
