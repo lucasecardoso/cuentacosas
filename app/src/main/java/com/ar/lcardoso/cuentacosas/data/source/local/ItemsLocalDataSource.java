@@ -139,6 +139,23 @@ public class ItemsLocalDataSource implements ItemsDataSource {
     }
 
     @Override
+    public void deleteItem(@NonNull Item item, @NonNull DeleteItemCallback callback) {
+        checkNotNull(item);
+        checkNotNull(callback);
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        int delete = db.delete(ItemEntry.TABLE_NAME, ItemEntry.COLUMN_NAME_ENTRY_ID + " = ? ", new String[]{item.getId()});
+
+        db.close();
+
+        if (delete == -1)
+            callback.onDeleteFailed(item);
+        else
+            callback.onItemDeleted();
+    }
+
+    @Override
     public void deleteAllItems() {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -155,13 +172,13 @@ public class ItemsLocalDataSource implements ItemsDataSource {
 
         int update = updateItemCount(item, db);
 
-        if (update == -1) {
-            db.close();
+        db.close();
+
+        if (update == -1)
             callback.onUpdateFailed(item);
-        } else {
-            db.close();
+        else
             callback.onItemUpdated();
-        }
+
     }
 
 
@@ -176,13 +193,12 @@ public class ItemsLocalDataSource implements ItemsDataSource {
 
         int update = updateItemCount(item, db);
 
-        if (update == -1) {
-            db.close();
+        db.close();
+
+        if (update == -1)
             updateItemCallback.onUpdateFailed(item);
-        } else {
-            db.close();
+        else
             updateItemCallback.onItemUpdated();
-        }
 
     }
 

@@ -41,11 +41,20 @@ public interface ItemsDataSource {
         void onUpdateFailed(Item item);
     }
 
+    interface DeleteItemCallback {
+
+        void onItemDeleted();
+
+        void onDeleteFailed(Item item);
+    }
+
     void getItems(@NonNull LoadItemsCallback callback);
 
     void getItem(@NonNull String id, @NonNull GetItemCallback callback);
 
     void saveItem(@NonNull Item item, @NonNull SaveItemCallback callback);
+
+    void deleteItem(@NonNull Item item, @NonNull DeleteItemCallback callback);
 
     void deleteAllItems();
 

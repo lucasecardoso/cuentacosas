@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ar.lcardoso.cuentacosas.R;
 import com.ar.lcardoso.cuentacosas.data.source.local.ItemsLocalDataSource;
@@ -60,6 +61,11 @@ public class ItemsActivity extends AppCompatActivity implements AddItemDialog.Ad
     @Override
     public void onDialogPositiveClick(DialogFragment dialog, String itemName) {
         Log.d("DEBUG", "OK");
+        if (itemName.isEmpty()) {
+            Toast.makeText(this, R.string.additem_no_item_name_error, Toast.LENGTH_LONG);
+            return;
+        }
+
         mItemsPresenter.addNewItem(itemName);
         dialog.dismiss();
     }

@@ -92,6 +92,14 @@ public class ItemsScreenTest {
     }
 
     @Test
+    public void clickAddItem_emptyText() {
+        onView(withId(R.id.fab_add_item)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        //TODO: check the toast appearance
+        onView(withId(R.id.item_title)).check(doesNotExist());
+    }
+
+    @Test
     public void clickAddItem_dismissDialog() {
         onView(withId(R.id.fab_add_item)).perform(click());
         onView(withId(android.R.id.button2)).perform(click());

@@ -2,4 +2,7 @@
     <string name="app_name">CuentaCosas</string>
     <string name="additem_name">Item Name</string>
     <string name="additem_headline">Add a name for this item</string>
+    <string name="additem_no_item_name_error">Please add a name for this item</string>
+    <string name="edit_item_popup">Edit Title</string>
+    <string name="delete_item_popup">Delete Item</string>
 </resources>

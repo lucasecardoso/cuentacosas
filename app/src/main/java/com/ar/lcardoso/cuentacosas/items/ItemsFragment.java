@@ -35,6 +35,8 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
 
     private LinearLayout mItemsView;
 
+    private View mRoot;
+
     private ItemsAdapter mAdapter;
 
     private ItemsListener mItemListener = new ItemsListener() {
@@ -56,6 +58,17 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
         @Override
         public void onItemNameHold() {
             Log.d("DEBUG", "onItemNameHold()");
+        }
+
+        @Override
+        public void onItemNameClicked(View rowView) {
+            Log.d("DEBUG", "onItemNameClicked()");
+
+            View toolbar = rowView.findViewById(R.id.item_line_toolbar);
+
+            ItemToolbarAnimation animation = new ItemToolbarAnimation(toolbar, 500);
+
+            toolbar.startAnimation(animation);
         }
     };
 
@@ -79,11 +92,11 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.item_fragment, container, false);
+        mRoot = inflater.inflate(R.layout.item_fragment, container, false);
 
-        ListView listView = (ListView) root.findViewById(R.id.items_list);
+        ListView listView = (ListView) mRoot.findViewById(R.id.items_list);
         listView.setAdapter(mAdapter);
-        mItemsView = (LinearLayout) root.findViewById(R.id.items_LL);
+        mItemsView = (LinearLayout) mRoot.findViewById(R.id.items_LL);
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_add_item);
         fab.setOnClickListener((v) -> {
@@ -93,7 +106,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
 
         setHasOptionsMenu(true);
 
-        return root;
+        return mRoot;
     }
 
     @Override
@@ -154,6 +167,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
                 rowView = inflater.inflate(R.layout.item_line, parent, false);
             }
 
+            final View rv = rowView;
             final Item item = getItem(position);
 
             TextView titleView = (TextView) rowView.findViewById(R.id.item_title);
@@ -173,13 +187,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
                 listener.onMinusCountClicked(item);
             });
 
-            titleView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    listener.onItemNameHold();
-                    return false;
-                }
-            });
+            titleView.setOnClickListener(view -> listener.onItemNameClicked(rv));
 
             return rowView;
         }
@@ -191,5 +199,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
         void onMinusCountClicked(Item item);
 
         void onItemNameHold();
+
+        void onItemNameClicked(View view);
     }
 }
