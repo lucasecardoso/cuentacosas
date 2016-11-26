@@ -55,12 +55,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
         public void onMinusCountClicked(Item item) {
             Log.d("DEBUG", "onMinusCountClicked()");
 
-            mPresenter.substractCount(item);
-        }
-
-        @Override
-        public void onItemNameHold() {
-            Log.d("DEBUG", "onItemNameHold()");
+            mPresenter.subtractCount(item);
         }
 
         @Override
@@ -87,6 +82,16 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
                 });
                 toolbar.startAnimation(anim);
             }
+
+        }
+
+        @Override
+        public void onDeleteItemClicked(Item item) {
+            mPresenter.deleteItem(item);
+        }
+
+        @Override
+        public void onEditItemClicked(Item item) {
 
         }
     };
@@ -149,7 +154,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
 
     }
 
-    private static class ItemsAdapter extends BaseAdapter {
+    private class ItemsAdapter extends BaseAdapter {
 
         private List<Item> items;
         private ItemsListener listener;
@@ -188,24 +193,28 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
 
             final View rv = rowView;
             final Item item = getItem(position);
-
-            TextView titleView = (TextView) rowView.findViewById(R.id.item_title);
+            final TextView titleView = (TextView) rowView.findViewById(R.id.item_title);
             titleView.setText(item.getTitle());
-
             TextView countView = (TextView) rowView.findViewById(R.id.count_text);
             countView.setText("" + item.getCount());
 
             View plusBtn = rowView.findViewById(R.id.plus_btn);
             View minusBtn = rowView.findViewById(R.id.minus_btn);
+            View editBtn = rowView.findViewById(R.id.edit_item);
+            View deleteBtn = rowView.findViewById(R.id.delete_item);
 
-            plusBtn.setOnClickListener(view -> {
-                listener.onAddCountClicked(item);
+
+            plusBtn.setOnClickListener(view -> listener.onAddCountClicked(item));
+            minusBtn.setOnClickListener(view -> listener.onMinusCountClicked(item));
+            deleteBtn.setOnClickListener(view -> listener.onDeleteItemClicked(item));
+            editBtn.setOnClickListener(view -> {
+                EditItemDialog dialog = new EditItemDialog();
+                Bundle bundle = new Bundle();
+                bundle.putString("itemName", item.getTitle());
+                bundle.putString("itemId", item.getId());
+                dialog.setArguments(bundle);
+                dialog.show(getActivity().getFragmentManager(), "editItem");
             });
-
-            minusBtn.setOnClickListener(view -> {
-                listener.onMinusCountClicked(item);
-            });
-
             titleView.setOnClickListener(view -> listener.onItemNameClicked(rv));
 
             return rowView;
@@ -217,8 +226,10 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
 
         void onMinusCountClicked(Item item);
 
-        void onItemNameHold();
-
         void onItemNameClicked(View view);
+
+        void onDeleteItemClicked(Item item);
+
+        void onEditItemClicked(Item item);
     }
 }

@@ -37,7 +37,7 @@ public class ItemsPresenter implements ItemsContract.Presenter {
 
             @Override
             public void onSaveFailed() {
-                System.out.println("Error occurred while saving item");
+                Log.d("DEBUG", "Error occurred while saving item");
             }
         });
 
@@ -51,13 +51,49 @@ public class ItemsPresenter implements ItemsContract.Presenter {
     }
 
     @Override
+    public void deleteItem(Item item) {
+        mDataSource.deleteItem(item, new ItemsDataSource.DeleteItemCallback() {
+            @Override
+            public void onItemDeleted() { showItems(); }
+
+            @Override
+            public void onDeleteFailed(Item item) { Log.d("DEBUG", "Error occurred when deleting item"); }
+        });
+    }
+
+    @Override
+    public void editItem(Item item) {
+        mDataSource.editItem(item, new ItemsDataSource.EditItemCallback() {
+            @Override
+            public void onItemEdited() { showItems(); }
+
+            @Override
+            public void onEditFailed(Item item) { Log.d("DEBUG", "Error occurred when updating item"); }
+        });
+    }
+
+    @Override
+    public void editItem(String itemId, String newTitle) {
+        mDataSource.getItem(itemId, new ItemsDataSource.GetItemCallback() {
+            @Override
+            public void onItemLoaded(Item item) {
+                item.setTitle(newTitle);
+                editItem(item);
+            }
+
+            @Override
+            public void onDataNotAvailable() { Log.d("DEBUG", "Error occurred when updating item"); }
+        });
+    }
+
+    @Override
     public void addCount(Item item) {
         mDataSource.addCount(item, updateItemCallback);
     }
 
     @Override
-    public void substractCount(Item item) {
-        mDataSource.substractCount(item, updateItemCallback);
+    public void subtractCount(Item item) {
+        mDataSource.subtractCount(item, updateItemCallback);
     }
 
     public void showItems() {

@@ -16,8 +16,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void addItemLine(View view) {
         LinearLayout layout = (LinearLayout) findViewById(R.id.inner_layout);
-
-        //NEED TO SET PROGRAMMATICALLY THE WIDTH AND HEIGHT OF THE VIEW
-        //layout.addView(new ItemLine(this));
     }
 }

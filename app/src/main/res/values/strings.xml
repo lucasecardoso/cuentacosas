@@ -5,4 +5,5 @@
     <string name="additem_no_item_name_error">Please add a name for this item</string>
     <string name="edit_item_popup">Edit Title</string>
     <string name="delete_item_popup">Delete Item</string>
+    <string name="edititem_headline">Edit this item\'s title</string>
 </resources>

@@ -13,21 +13,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ar.lcardoso.cuentacosas.R;
+import com.ar.lcardoso.cuentacosas.data.Item;
 
 /**
- * Created by Lucas on 21/11/2016.
+ * Created by Lucas on 26/11/2016.
  */
 
-public class AddItemDialog extends DialogFragment {
+public class EditItemDialog extends DialogFragment {
 
-    private AddItemDialogListener mListener;
+    private EditDialogListener mListener;
     private View mView;
+    private Item mItem;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mListener = (AddItemDialogListener) context;
+        mListener = (EditDialogListener) context;
     }
 
     @SuppressWarnings("deprecation")
@@ -36,34 +38,46 @@ public class AddItemDialog extends DialogFragment {
         super.onAttach(activity);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-            mListener = (AddItemDialogListener) activity;
+            mListener = (EditDialogListener) activity;
     }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if (savedInstanceState == null)
+            savedInstanceState = getArguments();
+
+        String itemId = savedInstanceState.getString("itemId");
+        String itemName = savedInstanceState.getString("itemName");
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        //Pass null as the parent view because it's going in the dialog layout
         mView = inflater.inflate(R.layout.additem_dialog, null);
         builder.setView(mView);
 
+        EditText et = (EditText) mView.findViewById(R.id.additem_name);
+        et.setText(itemName);
+
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
-            EditText et = (EditText) mView.findViewById(R.id.additem_name);
             if (et.getText().toString().isEmpty())
                 Toast.makeText(getActivity(), R.string.additem_no_item_name_error, Toast.LENGTH_LONG).show();
             else
-                mListener.onDialogPositiveClick(AddItemDialog.this, et.getText().toString());
+                mListener.onEditDialogPositiveClick(itemId, et.getText().toString());
         });
 
-        builder.setNegativeButton("Cancel", (dialogInterface, i) ->
-                mListener.onDialogNegativeClick(AddItemDialog.this));
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> mListener.onEditDialogNegativeClick());
 
         return builder.create();
     }
 
-    public interface AddItemDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog, String itemName);
-        void onDialogNegativeClick(DialogFragment dialog);
+    public void setItem(Item item) {
+        this.mItem = item;
     }
+
+    public interface EditDialogListener {
+        void onEditDialogPositiveClick(String itemId, String text);
+        void onEditDialogNegativeClick();
+    }
+
 }

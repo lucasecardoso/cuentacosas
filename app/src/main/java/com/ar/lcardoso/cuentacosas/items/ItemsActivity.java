@@ -18,9 +18,10 @@ import com.ar.lcardoso.cuentacosas.data.source.local.ItemsLocalDataSource;
  * Created by Lucas on 14/11/2016.
  */
 
-public class ItemsActivity extends AppCompatActivity implements AddItemDialog.AddItemDialogListener {
+public class ItemsActivity extends AppCompatActivity
+        implements AddItemDialog.AddItemDialogListener, EditItemDialog.EditDialogListener {
 
-    private ItemsPresenter mItemsPresenter;
+    private ItemsContract.Presenter mItemsPresenter;
 
     private DrawerLayout mDrawerLayout;
 
@@ -74,5 +75,16 @@ public class ItemsActivity extends AppCompatActivity implements AddItemDialog.Ad
     public void onDialogNegativeClick(DialogFragment dialog) {
         Log.d("DEBUG", "Nope");
         dialog.dismiss();
+    }
+
+
+    @Override
+    public void onEditDialogPositiveClick(String itemId, String text) {
+        mItemsPresenter.editItem(itemId, text);
+    }
+
+    @Override
+    public void onEditDialogNegativeClick() {
+
     }
 }

@@ -48,11 +48,20 @@ public interface ItemsDataSource {
         void onDeleteFailed(Item item);
     }
 
+    interface EditItemCallback {
+
+        void onItemEdited();
+
+        void onEditFailed(Item item);
+    }
+
     void getItems(@NonNull LoadItemsCallback callback);
 
     void getItem(@NonNull String id, @NonNull GetItemCallback callback);
 
     void saveItem(@NonNull Item item, @NonNull SaveItemCallback callback);
+
+    void editItem(@NonNull Item item, @NonNull EditItemCallback callback);
 
     void deleteItem(@NonNull Item item, @NonNull DeleteItemCallback callback);
 
@@ -60,7 +69,7 @@ public interface ItemsDataSource {
 
     void addCount(@NonNull Item item, @NonNull UpdateItemCallback callback);
 
-    void substractCount(@NonNull Item item, @NonNull UpdateItemCallback updateItemCallback);
+    void subtractCount(@NonNull Item item, @NonNull UpdateItemCallback updateItemCallback);
 
 
 }

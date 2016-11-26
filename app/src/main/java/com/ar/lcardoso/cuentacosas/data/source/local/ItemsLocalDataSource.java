@@ -139,6 +139,29 @@ public class ItemsLocalDataSource implements ItemsDataSource {
     }
 
     @Override
+    public void editItem(@NonNull Item item, @NonNull EditItemCallback callback) {
+        checkNotNull(item);
+        checkNotNull(callback);
+
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ItemEntry.COLUMN_NAME_TITLE, item.getTitle());
+
+        int update = db.update(ItemEntry.TABLE_NAME, values, ItemEntry.COLUMN_NAME_ENTRY_ID + " = ?", new String[]{item.getId()});
+
+        if (update == -1) {
+            db.close();
+            callback.onEditFailed(item);
+        }
+        else {
+            db.close();
+            callback.onItemEdited();
+        }
+
+    }
+
+    @Override
     public void deleteItem(@NonNull Item item, @NonNull DeleteItemCallback callback) {
         checkNotNull(item);
         checkNotNull(callback);
@@ -183,7 +206,7 @@ public class ItemsLocalDataSource implements ItemsDataSource {
 
 
     @Override
-    public void substractCount(@NonNull Item item, @NonNull UpdateItemCallback updateItemCallback) {
+    public void subtractCount(@NonNull Item item, @NonNull UpdateItemCallback updateItemCallback) {
         if (item.getCount() <= 0)
             return;
 
