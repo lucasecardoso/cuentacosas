@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import com.ar.lcardoso.cuentacosas.R;
 import com.ar.lcardoso.cuentacosas.data.Item;
+import com.ar.lcardoso.cuentacosas.items.animation.ItemToolbarCloseAnimation;
+import com.ar.lcardoso.cuentacosas.items.animation.ItemToolbarOpenAnimation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,10 +68,26 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
             Log.d("DEBUG", "onItemNameClicked()");
 
             View toolbar = rowView.findViewById(R.id.item_line_toolbar);
+            if (toolbar.getVisibility() == View.GONE) {
+                toolbar.setVisibility(View.VISIBLE);
+                ItemToolbarOpenAnimation anim = new ItemToolbarOpenAnimation(toolbar, 500);
+                toolbar.startAnimation(anim);
+            } else {
+                ItemToolbarCloseAnimation anim = new ItemToolbarCloseAnimation(toolbar, 500);
 
-            ItemToolbarAnimation animation = new ItemToolbarAnimation(toolbar, 500);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {}
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        toolbar.setVisibility(View.GONE);
+                    }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {}
+                });
+                toolbar.startAnimation(anim);
+            }
 
-            toolbar.startAnimation(animation);
         }
     };
 
