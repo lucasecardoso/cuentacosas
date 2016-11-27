@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ar.lcardoso.cuentacosas.R;
@@ -56,8 +58,12 @@ public class EditItemDialog extends DialogFragment {
         mView = inflater.inflate(R.layout.additem_dialog, null);
         builder.setView(mView);
 
+        TextView tv = (TextView) mView.findViewById(R.id.additem_tv);
+        tv.setText(R.string.edititem_headline);
+
         EditText et = (EditText) mView.findViewById(R.id.additem_name);
         et.setText(itemName);
+        et.setSelectAllOnFocus(true);
 
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
             if (et.getText().toString().isEmpty())
@@ -68,7 +74,11 @@ public class EditItemDialog extends DialogFragment {
 
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> mListener.onEditDialogNegativeClick());
 
-        return builder.create();
+        Dialog dialog = builder.create();
+
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        return dialog;
     }
 
     public void setItem(Item item) {
