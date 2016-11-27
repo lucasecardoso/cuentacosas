@@ -1,5 +1,6 @@
 package com.ar.lcardoso.cuentacosas.items;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -123,9 +124,12 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
         mItemsView = (LinearLayout) mRoot.findViewById(R.id.items_LL);
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_add_item);
-        fab.setOnClickListener((v) -> {
-            DialogFragment f = new AddItemDialog();
-            f.show(getActivity().getFragmentManager(), "additem");
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment f = new AddItemDialog();
+                f.show(ItemsFragment.this.getActivity().getFragmentManager(), "additem");
+            }
         });
 
         setHasOptionsMenu(true);
@@ -145,9 +149,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
     }
 
     @Override
-    public void showNoItems() {
-
-    }
+    public void showNoItems() { showItems(new ArrayList<>()); }
 
     @Override
     public void showLoading() {
@@ -206,9 +208,16 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
 
             plusBtn.setOnClickListener(view -> listener.onAddCountClicked(item));
             minusBtn.setOnClickListener(view -> listener.onMinusCountClicked(item));
-            deleteBtn.setOnClickListener(view -> listener.onDeleteItemClicked(item));
+            deleteBtn.setOnClickListener(view -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage(R.string.deleteitem_confirm)
+                        .setPositiveButton("Yes", (dialogInterface, i) -> listener.onDeleteItemClicked(item))
+                        .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
+                        .show();
+
+            });
             editBtn.setOnClickListener(view -> {
-                EditItemDialog dialog = new EditItemDialog();
+                DialogFragment dialog = new EditItemDialog();
                 Bundle bundle = new Bundle();
                 bundle.putString("itemName", item.getTitle());
                 bundle.putString("itemId", item.getId());

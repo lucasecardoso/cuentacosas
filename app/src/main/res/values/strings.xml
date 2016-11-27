@@ -6,4 +6,5 @@
     <string name="edit_item_popup">Edit Title</string>
     <string name="delete_item_popup">Delete Item</string>
     <string name="edititem_headline">Edit this item\'s title</string>
+    <string name="deleteitem_confirm">Are you sure?</string>
 </resources>
