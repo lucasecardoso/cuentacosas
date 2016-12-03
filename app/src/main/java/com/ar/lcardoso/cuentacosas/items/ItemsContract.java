@@ -20,10 +20,11 @@ public interface ItemsContract {
 
     interface Presenter extends BasePresenter {
         void addNewItem(String title);
+        void addNewItem(String title, int step);
         void deleteItems();
         void deleteItem(Item item);
         void editItem(Item item);
-        void editItem(String itemId, String newTitle);
+        void editItem(String itemId, String newTitle, int step);
         void addCount(Item item);
         void subtractCount(Item item);
     }

@@ -19,14 +19,17 @@ public class Item {
 
     private int count;
 
-    public Item(@Nullable String title) {
-        this(UUID.randomUUID().toString(), title, 0);
+    private int step;
+
+    public Item(@Nullable String title, int step) {
+        this(UUID.randomUUID().toString(), title, 0, step);
     }
 
-    public Item(@NonNull String id, @Nullable String title, int count) {
-        this.id = id;
+    public Item(@NonNull String entryId, @Nullable String title, int count, int step) {
+        this.id = entryId;
         this.title = title;
         this.count = count;
+        this.step = step;
     }
 
     public int getCount() {
@@ -36,6 +39,8 @@ public class Item {
     public String getTitle() {
         return title;
     }
+
+    public int getStep() { return step; }
 
     @NonNull
     public String getId() { return id; }
@@ -47,6 +52,8 @@ public class Item {
     public void setCount(int count) {
         this.count = count;
     }
+
+    public void setStep(int step) { this.step = step; }
 
     @Override
     public boolean equals(Object o) {

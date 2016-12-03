@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ItemsDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "LucasItems.db";
 
@@ -19,17 +19,20 @@ public class ItemsDbHelper extends SQLiteOpenHelper {
                     ItemsPersistenceContract.ItemEntry._ID + " TEXT PRIMARY KEY, " +
                     ItemsPersistenceContract.ItemEntry.COLUMN_NAME_ENTRY_ID + " TEXT, " +
                     ItemsPersistenceContract.ItemEntry.COLUMN_NAME_TITLE + " TEXT, " +
-                    ItemsPersistenceContract.ItemEntry.COLUMN_NAME_COUNT + " INTEGER " +
+                    ItemsPersistenceContract.ItemEntry.COLUMN_NAME_COUNT + " INTEGER, " +
+                    ItemsPersistenceContract.ItemEntry.COLUMN_NAME_STEP + " INTEGER " +
             " )";
+
+    private static final String SQL_DROP_TABLE = "DROP TABLE " + ItemsPersistenceContract.ItemEntry.TABLE_NAME;
 
 
     public ItemsDbHelper(Context context) { super(context, DATABASE_NAME, null, DATABASE_VERSION); }
 
     @Override
-    public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_ENTRIES); }
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES);
+    }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { }
 }

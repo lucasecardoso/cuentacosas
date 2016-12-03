@@ -7,4 +7,6 @@
     <string name="delete_item_popup">Delete Item</string>
     <string name="edititem_headline">Edit this item\'s title</string>
     <string name="deleteitem_confirm">Are you sure?</string>
+    <string name="additem_step_tv">Count Multiplier</string>
+    <string name="additem_no_step_error">Please set the step to a value of 1 or bigger</string>
 </resources>

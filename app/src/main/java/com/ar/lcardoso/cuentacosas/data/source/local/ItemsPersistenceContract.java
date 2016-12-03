@@ -15,5 +15,6 @@ public final class ItemsPersistenceContract {
         public static final String COLUMN_NAME_ENTRY_ID = "entryId";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_COUNT = "count";
+        public static final String COLUMN_NAME_STEP = "step";
     }
 }

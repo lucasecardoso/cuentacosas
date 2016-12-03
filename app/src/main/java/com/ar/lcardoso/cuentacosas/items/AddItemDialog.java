@@ -52,11 +52,20 @@ public class AddItemDialog extends DialogFragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                EditText et = (EditText) mView.findViewById(R.id.additem_name);
-                if (et.getText().toString().isEmpty())
+                EditText titleEt = (EditText) mView.findViewById(R.id.additem_name);
+                EditText stepEt = (EditText) mView.findViewById(R.id.additem_step_et);
+
+                if (stepEt.getText().toString().isEmpty() || stepEt.getText().toString().equals("0")) {
+                    Toast.makeText(AddItemDialog.this.getActivity(), R.string.additem_no_step_error, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (titleEt.getText().toString().isEmpty()) {
                     Toast.makeText(AddItemDialog.this.getActivity(), R.string.additem_no_item_name_error, Toast.LENGTH_LONG).show();
-                else
-                    mListener.onDialogPositiveClick(AddItemDialog.this, et.getText().toString());
+                    return;
+                }
+
+                mListener.onDialogPositiveClick(AddItemDialog.this, titleEt.getText().toString(), Integer.parseInt(stepEt.getText().toString()));
             }
         });
 
@@ -71,7 +80,7 @@ public class AddItemDialog extends DialogFragment {
     }
 
     public interface AddItemDialogListener {
-        void onDialogPositiveClick(DialogFragment dialog, String itemName);
+        void onDialogPositiveClick(DialogFragment dialog, String itemName, int itemStep);
         void onDialogNegativeClick(DialogFragment dialog);
     }
 }

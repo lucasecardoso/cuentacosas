@@ -221,6 +221,7 @@ public class ItemsFragment extends Fragment implements ItemsContract.View {
                 Bundle bundle = new Bundle();
                 bundle.putString("itemName", item.getTitle());
                 bundle.putString("itemId", item.getId());
+                bundle.putInt("itemStep", item.getStep());
                 dialog.setArguments(bundle);
                 dialog.show(getActivity().getFragmentManager(), "editItem");
             });

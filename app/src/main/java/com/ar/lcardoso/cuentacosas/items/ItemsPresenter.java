@@ -28,7 +28,18 @@ public class ItemsPresenter implements ItemsContract.Presenter {
 
     @Override
     public void addNewItem(String title) {
-        mDataSource.saveItem(new Item(title), new ItemsDataSource.SaveItemCallback() {
+        saveItem(new Item(title, 1));
+
+        showItems();
+    }
+
+    @Override
+    public void addNewItem(String title, int step) {
+        saveItem(new Item(title, step));
+    }
+
+    private void saveItem(Item item) {
+        mDataSource.saveItem(item, new ItemsDataSource.SaveItemCallback() {
             @Override
             public void onItemSaved() {
                 System.out.println("Item saved successfully");
@@ -40,8 +51,6 @@ public class ItemsPresenter implements ItemsContract.Presenter {
                 Log.d("DEBUG", "Error occurred while saving item");
             }
         });
-
-        showItems();
     }
 
     @Override
@@ -73,11 +82,12 @@ public class ItemsPresenter implements ItemsContract.Presenter {
     }
 
     @Override
-    public void editItem(String itemId, String newTitle) {
+    public void editItem(String itemId, String newTitle, int step) {
         mDataSource.getItem(itemId, new ItemsDataSource.GetItemCallback() {
             @Override
             public void onItemLoaded(Item item) {
                 item.setTitle(newTitle);
+                item.setStep(step);
                 editItem(item);
             }
 

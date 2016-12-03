@@ -60,14 +60,13 @@ public class ItemsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, String itemName) {
-        Log.d("DEBUG", "OK");
+    public void onDialogPositiveClick(DialogFragment dialog, String itemName, int step) {
         if (itemName.isEmpty()) {
             Toast.makeText(this, R.string.additem_no_item_name_error, Toast.LENGTH_LONG);
             return;
         }
 
-        mItemsPresenter.addNewItem(itemName);
+        mItemsPresenter.addNewItem(itemName, step);
         dialog.dismiss();
     }
 
@@ -79,8 +78,8 @@ public class ItemsActivity extends AppCompatActivity
 
 
     @Override
-    public void onEditDialogPositiveClick(String itemId, String text) {
-        mItemsPresenter.editItem(itemId, text);
+    public void onEditDialogPositiveClick(String itemId, String text, int step) {
+        mItemsPresenter.editItem(itemId, text, step);
     }
 
     @Override

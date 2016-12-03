@@ -51,7 +51,8 @@ public class ItemsLocalDataSource implements ItemsDataSource {
         String[] columns = {
                 ItemEntry.COLUMN_NAME_ENTRY_ID,
                 ItemEntry.COLUMN_NAME_TITLE,
-                ItemEntry.COLUMN_NAME_COUNT
+                ItemEntry.COLUMN_NAME_COUNT,
+                ItemEntry.COLUMN_NAME_STEP
         };
 
         Cursor c = db.query(ItemEntry.TABLE_NAME, columns, null, null, null, null, null, null);
@@ -61,8 +62,9 @@ public class ItemsLocalDataSource implements ItemsDataSource {
                 String entryId = c.getString(c.getColumnIndexOrThrow(ItemEntry.COLUMN_NAME_ENTRY_ID));
                 String title = c.getString(c.getColumnIndexOrThrow(ItemEntry.COLUMN_NAME_TITLE));
                 int count = c.getInt(c.getColumnIndexOrThrow(ItemEntry.COLUMN_NAME_COUNT));
+                int step = c.getInt(c.getColumnIndex(ItemEntry.COLUMN_NAME_STEP));
 
-                Item item = new Item(entryId, title, count);
+                Item item = new Item(entryId, title, count, step);
                 items.add(item);
             }
         }
@@ -88,7 +90,8 @@ public class ItemsLocalDataSource implements ItemsDataSource {
         String[] columns = {
                 ItemEntry.COLUMN_NAME_ENTRY_ID,
                 ItemEntry.COLUMN_NAME_TITLE,
-                ItemEntry.COLUMN_NAME_COUNT
+                ItemEntry.COLUMN_NAME_COUNT,
+                ItemEntry.COLUMN_NAME_STEP
         };
 
         String selection = ItemEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
@@ -102,8 +105,9 @@ public class ItemsLocalDataSource implements ItemsDataSource {
             String entryId = c.getString(c.getColumnIndexOrThrow(ItemEntry.COLUMN_NAME_ENTRY_ID));
             String title = c.getString(c.getColumnIndexOrThrow(ItemEntry.COLUMN_NAME_TITLE));
             int count = c.getInt(c.getColumnIndexOrThrow(ItemEntry.COLUMN_NAME_COUNT));
+            int step = c.getInt(c.getColumnIndex(ItemEntry.COLUMN_NAME_STEP));
 
-            item = new Item(entryId, title, count);
+            item = new Item(entryId, title, count, step);
         }
 
         if (c != null)
@@ -128,6 +132,8 @@ public class ItemsLocalDataSource implements ItemsDataSource {
         values.put(ItemEntry.COLUMN_NAME_ENTRY_ID, item.getId());
         values.put(ItemEntry.COLUMN_NAME_TITLE, item.getTitle());
         values.put(ItemEntry.COLUMN_NAME_COUNT, item.getCount());
+        values.put(ItemEntry.COLUMN_NAME_STEP, item.getStep());
+
 
         if (db.insert(ItemEntry.TABLE_NAME, null, values) == -1) {
             db.close();
@@ -147,6 +153,7 @@ public class ItemsLocalDataSource implements ItemsDataSource {
 
         ContentValues values = new ContentValues();
         values.put(ItemEntry.COLUMN_NAME_TITLE, item.getTitle());
+        values.put(ItemEntry.COLUMN_NAME_STEP, item.getStep());
 
         int update = db.update(ItemEntry.TABLE_NAME, values, ItemEntry.COLUMN_NAME_ENTRY_ID + " = ?", new String[]{item.getId()});
 
@@ -191,7 +198,10 @@ public class ItemsLocalDataSource implements ItemsDataSource {
     public void addCount(@NonNull Item item, UpdateItemCallback callback) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        item.setCount(item.getCount() + 1);
+        Log.d("DEBUG", "item count = " + item.getCount());
+        Log.d("DEBUG", "item step = " + item.getStep());
+
+        item.setCount(item.getCount() + (1 * item.getStep()));
 
         int update = updateItemCount(item, db);
 
@@ -212,7 +222,12 @@ public class ItemsLocalDataSource implements ItemsDataSource {
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        item.setCount(item.getCount() - 1);
+        int result = item.getCount() - (1 * item.getStep());
+
+        if (result < 0)
+            item.setCount(0);
+        else
+            item.setCount(result);
 
         int update = updateItemCount(item, db);
 

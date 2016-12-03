@@ -55,7 +55,7 @@ public class ItemsLocalDataSourceTest {
     @Test
     public void saveItem() {
         //Given a new item
-        final Item newItem = new Item(ITEM_TITLE);
+        final Item newItem = new Item(ITEM_TITLE, 1);
 
         //When saved into the persistent storage
         mLocalDataSource.saveItem(newItem, new ItemsDataSource.SaveItemCallback() {
@@ -79,7 +79,7 @@ public class ItemsLocalDataSourceTest {
     @Test
     public void retrieveItem() {
         //Create new item
-        final Item item1 = new Item(ITEM_TITLE);
+        final Item item1 = new Item(ITEM_TITLE, 1);
 
         //Save them to storage
         mLocalDataSource.saveItem(item1, saveItemCallback);
@@ -97,9 +97,9 @@ public class ItemsLocalDataSourceTest {
     @Test
     public void retrieveAllItems() {
         //Create several items
-        final Item item1 = new Item(ITEM_TITLE);
-        final Item item2 = new Item(ITEM_TITLE2);
-        final Item item3 = new Item(ITEM_TITLE3);
+        final Item item1 = new Item(ITEM_TITLE, 1);
+        final Item item2 = new Item(ITEM_TITLE2, 1);
+        final Item item3 = new Item(ITEM_TITLE3, 1);
 
         mLocalDataSource.saveItem(item1, saveItemCallback);
         mLocalDataSource.saveItem(item2, saveItemCallback);

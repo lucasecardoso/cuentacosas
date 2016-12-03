@@ -51,6 +51,7 @@ public class EditItemDialog extends DialogFragment {
 
         String itemId = savedInstanceState.getString("itemId");
         String itemName = savedInstanceState.getString("itemName");
+        int step = savedInstanceState.getInt("itemStep");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -61,15 +62,26 @@ public class EditItemDialog extends DialogFragment {
         TextView tv = (TextView) mView.findViewById(R.id.additem_tv);
         tv.setText(R.string.edititem_headline);
 
-        EditText et = (EditText) mView.findViewById(R.id.additem_name);
-        et.setText(itemName);
-        et.setSelectAllOnFocus(true);
+        EditText titleEt = (EditText) mView.findViewById(R.id.additem_name);
+        titleEt.setText(itemName);
+        titleEt.setSelectAllOnFocus(true);
+
+        EditText stepEt = (EditText) mView.findViewById(R.id.additem_step_et);
+        stepEt.setText("" + step);
 
         builder.setPositiveButton("OK", (dialogInterface, i) -> {
-            if (et.getText().toString().isEmpty())
+            if (stepEt.getText().toString().isEmpty() || stepEt.getText().toString().equals("0")) {
+                Toast.makeText(EditItemDialog.this.getActivity(), R.string.additem_no_step_error, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (titleEt.getText().toString().isEmpty()) {
                 Toast.makeText(getActivity(), R.string.additem_no_item_name_error, Toast.LENGTH_LONG).show();
+                return;
+            }
+
             else
-                mListener.onEditDialogPositiveClick(itemId, et.getText().toString());
+                mListener.onEditDialogPositiveClick(itemId, titleEt.getText().toString(), Integer.parseInt(stepEt.getText().toString()));
         });
 
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> mListener.onEditDialogNegativeClick());
@@ -86,7 +98,7 @@ public class EditItemDialog extends DialogFragment {
     }
 
     public interface EditDialogListener {
-        void onEditDialogPositiveClick(String itemId, String text);
+        void onEditDialogPositiveClick(String itemId, String text, int step);
         void onEditDialogNegativeClick();
     }
 
